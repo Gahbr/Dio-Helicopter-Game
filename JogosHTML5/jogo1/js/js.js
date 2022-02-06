@@ -7,7 +7,8 @@ function start() {
   $("#fundoGame").append("<div id='inimigo1' class='anima2'></div>");
   $("#fundoGame").append("<div id='inimigo2' ></div>");
   $("#fundoGame").append("<div id='amigo' class='anima3'></div>");
-  
+  $("#fundoGame").append("<div id='placar'></div>");
+  $("#fundoGame").append("<div id='energia'></div>");
 
   //Principais variáveis do jogo
 
@@ -15,18 +16,18 @@ function start() {
   var TECLA = {
     W: 87,
     S: 83,
-    D: 68,
-  };
-
+    D: 68, };
   jogo.pressionou = [];
   var velocidade = 5;
   var posicaoY = parseInt(Math.random() * 334);
   var podeAtirar = true;
   var fimdejogo=false;
+  var pontos=0;
+  var salvos=0;
+  var perdidos=0;
+  var energiaAtual=3;
 
-
-
-  //Verifica se o usu�rio pressionou alguma tecla
+  //Verifica se o usuário pressionou alguma tecla
 
   $(document).keydown(function (e) {
     jogo.pressionou[e.which] = true;
@@ -47,6 +48,8 @@ function start() {
     moveinimigo2();
     moveamigo();
     colisao();
+	placar();
+	energia();
 
   } // Fim da função loop()
 
@@ -60,7 +63,7 @@ function start() {
   function movejogador() {
     if (jogo.pressionou[TECLA.W]) {
       var topo = parseInt($("#jogador").css("top"));
-      $("#jogador").css("top", topo - 10);
+      $("#jogador").css("top", topo - 15);
 
       if (topo <= 0) {
         $("#jogador").css("top", topo);
@@ -69,7 +72,7 @@ function start() {
 
     if (jogo.pressionou[TECLA.S]) {
       var topo = parseInt($("#jogador").css("top"));
-      $("#jogador").css("top", topo + 10);
+      $("#jogador").css("top", topo + 15);
 
       if (topo >= 434) {
         $("#jogador").css("top", topo);
@@ -124,7 +127,7 @@ function start() {
       $("#disparo").css("top", topoTiro);
       $("#disparo").css("left", tiroX);
 
-      var tempoDisparo = window.setInterval(executaDisparo, 30);
+      var tempoDisparo = window.setInterval(executaDisparo, 20);
     } //Fecha podeAtirar
 
     function executaDisparo() {
@@ -152,7 +155,7 @@ var colisao6 = ($("#inimigo2").collision($("#amigo")));
 // jogador com o inimigo1
 	
 	if (colisao1.length>0) {
-		
+		energiaAtual--;	
 	inimigo1X = parseInt($("#inimigo1").css("left"));
 	inimigo1Y = parseInt($("#inimigo1").css("top"));
 	explosao1(inimigo1X,inimigo1Y);
@@ -164,7 +167,7 @@ var colisao6 = ($("#inimigo2").collision($("#amigo")));
 
 // jogador com o inimigo2 
 if (colisao2.length>0) {
-	
+	energiaAtual--;
 	inimigo2X = parseInt($("#inimigo2").css("left"));
 	inimigo2Y = parseInt($("#inimigo2").css("top"));
 	explosao2(inimigo2X,inimigo2Y);
@@ -178,7 +181,8 @@ if (colisao2.length>0) {
 // Disparo com o inimigo1
 	
 if (colisao3.length>0) {
-	
+	velocidade=velocidade+0.3;
+	pontos=pontos+100;
 	
 	inimigo1X = parseInt($("#inimigo1").css("left"));
 	inimigo1Y = parseInt($("#inimigo1").css("top"));
@@ -194,7 +198,7 @@ if (colisao3.length>0) {
 // Disparo com o inimigo2
 		
 if (colisao4.length>0) {
-		
+	pontos=pontos+50;
 	inimigo2X = parseInt($("#inimigo2").css("left"));
 	inimigo2Y = parseInt($("#inimigo2").css("top"));
 	$("#inimigo2").remove();
@@ -209,15 +213,15 @@ if (colisao4.length>0) {
 // jogador com o amigo
 	
 if (colisao5.length>0) {
-	
+	salvos++;
 	reposicionaAmigo();
 	$("#amigo").remove();
 	}
 
 //Inimigo2 com o amigo
-		
+
 if (colisao6.length>0) {
-	    
+	perdidos++;
 	amigoX = parseInt($("#amigo").css("left"));
 	amigoY = parseInt($("#amigo").css("top"));
 	explosao3(amigoX,amigoY);
@@ -330,9 +334,40 @@ function reposicionaAmigo() {
 	
 } // Fim da função reposicionaAmigo()
 	
+function placar() {
+	
+	$("#placar").html("<h2> Pontos: " + pontos + " Salvos: " + salvos + " Perdidos: " + perdidos + "</h2>");
+	
+} //fim da fun��o placar()
 
 
+//Barra de energia
 
+function energia() {
+	
+	if (energiaAtual==3) {
+		
+		$("#energia").css("background-image", "url(imgs/energia3.png)");
+	}
+
+	if (energiaAtual==2) {
+		
+		$("#energia").css("background-image", "url(imgs/energia2.png)");
+	}
+
+	if (energiaAtual==1) {
+		
+		$("#energia").css("background-image", "url(imgs/energia1.png)");
+	}
+
+	if (energiaAtual==0) {
+		
+		$("#energia").css("background-image", "url(imgs/energia0.png)");
+		
+		//Game Over
+	}
+
+	} // Fim da fun��o energia()
 
 
 
