@@ -31,6 +31,7 @@ function start() {
   var somDisparo = document.getElementById("somDisparo");
   var somExplosao = document.getElementById("somExplosao");
   var musica = document.getElementById("musica");
+      musica.volume= 0.3;
   var somGameover = document.getElementById("somGameover");
   var somPerdido = document.getElementById("somPerdido");
   var somResgate = document.getElementById("somResgate");
